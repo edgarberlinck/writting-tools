@@ -1,0 +1,2 @@
+[console_scripts]
+writing-tools = writing_tools.cli:main

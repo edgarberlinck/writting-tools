@@ -1,2 +1,2 @@
-# writting-tools
-Simple and efective tools to write books
+# writing-tools
+Simple and effective tools to write books

@@ -1,0 +1,17 @@
+README.md
+pyproject.toml
+src/writing_tools/__init__.py
+src/writing_tools/analyzer.py
+src/writing_tools/chapter.py
+src/writing_tools/cli.py
+src/writing_tools/formatter.py
+src/writing_tools.egg-info/PKG-INFO
+src/writing_tools.egg-info/SOURCES.txt
+src/writing_tools.egg-info/dependency_links.txt
+src/writing_tools.egg-info/entry_points.txt
+src/writing_tools.egg-info/requires.txt
+src/writing_tools.egg-info/top_level.txt
+tests/test_analyzer.py
+tests/test_chapter.py
+tests/test_cli.py
+tests/test_formatter.py
