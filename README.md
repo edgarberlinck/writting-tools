@@ -1,73 +1,37 @@
-# React + TypeScript + Vite
+# Writing Tools
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A complete browser-based book writing application built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Project Management** – Create, edit, and delete book projects with title, author, and description
+- **WYSIWYG Editor** – Rich text editing powered by TipTap (bold, italic, underline, headings, blockquotes, text alignment)
+- **Chapter & Section Hierarchy** – Organize content into chapters (regular, introduction, foreword, epigraph, appendix, about author) with optional sub-sections
+- **Drag & Drop Reordering** – Reorder chapters and sections via drag and drop using @dnd-kit
+- **Multi-language Support** – Write content in EN, PT-BR, ES, FR, and DE for the same chapter/section
+- **PDF Export** – Export any chapter or section to PDF with configurable page size, fonts, and margins
+- **Project Settings** – Configure page size (A4/A5/Letter), margins, font family/size, line spacing, and chapter title format
+- **Offline-first Storage** – All data stored locally in the browser via PouchDB (no backend required)
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Build
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
 ```
+
+## Tech Stack
+
+- [Vite](https://vitejs.dev/) + [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- [TipTap](https://tiptap.dev/) – Rich text editor
+- [PouchDB](https://pouchdb.com/) – Browser-based local database
+- [@dnd-kit](https://dndkit.com/) – Drag and drop
+- [Tailwind CSS v3](https://tailwindcss.com/) – Utility-first styling
+- [jsPDF](https://github.com/parallax/jsPDF) + [html2canvas](https://html2canvas.hertzen.com/) – PDF export
+- [React Router](https://reactrouter.com/) – Client-side routing
