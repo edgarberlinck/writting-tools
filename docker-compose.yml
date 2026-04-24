@@ -1,0 +1,10 @@
+services:
+  writing-tools:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: writing-tools:latest
+    container_name: writing-tools
+    ports:
+      - "8080:80"
+    restart: unless-stopped
