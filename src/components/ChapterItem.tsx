@@ -18,6 +18,7 @@ const CHAPTER_TYPE_LABELS: Record<string, string> = {
   epigraph: 'Epig',
   foreword: 'Fwd',
   appendix: 'App',
+  moodboard: 'Mood',
 };
 
 interface Props {
@@ -106,7 +107,7 @@ export default function ChapterItem({
         </div>
       </div>
 
-      {expanded && (
+      {expanded && chapter.chapterType !== 'moodboard' && (
         <div className="mb-1">
           <DndContext collisionDetection={closestCenter} onDragEnd={handleSectionDragEnd}>
             <SortableContext items={sections.map((s) => s._id)} strategy={verticalListSortingStrategy}>

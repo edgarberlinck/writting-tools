@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { FiSettings, FiArrowLeft, FiSidebar } from "react-icons/fi";
+import { FiSettings, FiArrowLeft, FiSidebar, FiInfo } from "react-icons/fi";
 import { useBookEditor } from "../hooks/useBookEditor";
 import Sidebar from "../components/Sidebar";
 import Editor from "../components/Editor";
+import MoodboardEditor from "../components/MoodboardEditor";
 import LanguageTabs from "../components/LanguageTabs";
 import ExportButton from "../components/ExportButton";
+import AboutModal from "../components/AboutModal";
 
 export default function BookEditor() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [showAbout, setShowAbout] = useState(false);
 
   const {
     project,
@@ -72,10 +75,12 @@ export default function BookEditor() {
             <p className="text-xs text-gray-500">{project.author}</p>
           )}
         </div>
-        <LanguageTabs
-          selectedLocale={selectedLocale}
-          onChange={setSelectedLocale}
-        />
+        {selectedChapter?.chapterType !== 'moodboard' && (
+          <LanguageTabs
+            selectedLocale={selectedLocale}
+            onChange={setSelectedLocale}
+          />
+        )}
         {project && (
           <ExportButton
             project={project}
@@ -92,6 +97,13 @@ export default function BookEditor() {
           title="Settings"
         >
           <FiSettings className="w-5 h-5" />
+        </button>
+        <button
+          onClick={() => setShowAbout(true)}
+          className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+          title="About"
+        >
+          <FiInfo className="w-5 h-5" />
         </button>
       </header>
 
@@ -129,11 +141,19 @@ export default function BookEditor() {
 
         <div className="flex-1 overflow-hidden flex flex-col">
           {selectedChapter ? (
-            <Editor
-              key={`${selectedChapterId}-${selectedSectionId}-${selectedLocale}`}
-              content={editorContent}
-              onChange={saveContent}
-            />
+            selectedChapter.chapterType === 'moodboard' ? (
+              <MoodboardEditor
+                key={`${selectedChapterId}-moodboard`}
+                content={editorContent}
+                onChange={saveContent}
+              />
+            ) : (
+              <Editor
+                key={`${selectedChapterId}-${selectedSectionId}-${selectedLocale}`}
+                content={editorContent}
+                onChange={saveContent}
+              />
+            )
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center py-20">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
@@ -149,6 +169,8 @@ export default function BookEditor() {
           )}
         </div>
       </div>
+
+      <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />
     </div>
   );
 }

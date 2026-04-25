@@ -29,7 +29,7 @@ export interface Project {
   _rev?: string;
 }
 
-export type ChapterType = 'regular' | 'introduction' | 'about_author' | 'epigraph' | 'foreword' | 'appendix';
+export type ChapterType = 'regular' | 'introduction' | 'about_author' | 'epigraph' | 'foreword' | 'appendix' | 'moodboard';
 
 export interface Chapter {
   _id: string;

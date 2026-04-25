@@ -55,9 +55,13 @@ export default function ExportButton({
   const [menuOpen, setMenuOpen] = useState(false);
   const [exportMode, setExportMode] = useState<ExportMode>("current");
   const [exportLocale, setExportLocale] = useState(locale);
+  const [includeMoodboards, setIncludeMoodboards] = useState(false);
 
   const hasCurrentSelection = Boolean(chapter);
   const hasBookContent = chapters.length > 0;
+  const exportableChapters = includeMoodboards
+    ? chapters
+    : chapters.filter((ch) => ch.chapterType !== "moodboard");
 
   const currentSelectionLabel = useMemo(() => {
     if (!chapter) return "No selection";
@@ -66,7 +70,7 @@ export default function ExportButton({
   }, [chapter, section]);
 
   const buildCurrentSelectionHtml = (lang: string): ExportTarget | null => {
-    if (!chapter) return null;
+    if (!chapter || chapter.chapterType === "moodboard") return null;
 
     if (section) {
       const title = `${chapter.title} - ${section.title}`;
@@ -103,8 +107,8 @@ export default function ExportButton({
   const buildEntireBookTargets = (
     lang: string,
   ): { title: string; chapters: ExportTarget[] } | null => {
-    if (!hasBookContent) return null;
-    const chapterTargets = chapters.map((ch) => {
+    if (exportableChapters.length === 0) return null;
+    const chapterTargets = exportableChapters.map((ch) => {
       const chapterSections = sectionsByChapter[ch._id] || [];
       const chapterParts = [
         getLocalizedHtml(ch, lang),
@@ -345,6 +349,15 @@ export default function ExportButton({
               ))}
             </select>
           </div>
+
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={includeMoodboards}
+              onChange={(e) => setIncludeMoodboards(e.target.checked)}
+            />
+            <span>Include Moodboards</span>
+          </label>
 
           <div className="flex justify-end gap-2">
             <button

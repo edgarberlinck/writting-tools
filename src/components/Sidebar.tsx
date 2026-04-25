@@ -33,6 +33,7 @@ const CHAPTER_TYPES: { value: ChapterType; label: string }[] = [
   { value: "epigraph", label: "Epigraph" },
   { value: "foreword", label: "Foreword" },
   { value: "appendix", label: "Appendix" },
+  { value: "moodboard", label: "Moodboard" },
 ];
 
 export default function Sidebar(props: Props) {
