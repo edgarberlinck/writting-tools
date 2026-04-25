@@ -72,11 +72,6 @@ export function useBookEditor(
     };
   });
 
-  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const saveTimerByLocaleRef = useRef<
-    Map<string, ReturnType<typeof setTimeout>>
-  >(new Map());
-
   // ─── Data loaders ──────────────────────────────────────────────────────
 
   const loadSections = useCallback(async (chapterId: string) => {
@@ -269,79 +264,66 @@ export function useBookEditor(
   // ─── Content save (debounced) ──────────────────────────────────────────
 
   const saveContent = useCallback(
-    (html: string) => {
-      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
-      saveTimerRef.current = setTimeout(async () => {
-        const {
-          selectedChapterId: cid,
-          selectedSectionId: sid,
-          selectedLocale: locale,
-          chapters: latestChapters,
-          sections: latestSections,
-        } = stateRef.current;
+    async (html: string) => {
+      const {
+        selectedChapterId: cid,
+        selectedSectionId: sid,
+        selectedLocale: locale,
+        chapters: latestChapters,
+        sections: latestSections,
+      } = stateRef.current;
 
-        if (!cid) return;
-        const chapter = latestChapters.find((c) => c._id === cid);
-        if (!chapter) return;
+      if (!cid) return;
+      const chapter = latestChapters.find((c) => c._id === cid);
+      if (!chapter) return;
 
-        if (sid) {
-          const section = (latestSections[cid] ?? []).find(
-            (s) => s._id === sid,
-          );
-          if (section) {
-            await repository.saveSection({
-              ...section,
-              languages: setLocaleContent(section.languages, locale, html),
-            });
-            await loadSections(cid);
-          }
-        } else {
-          await repository.saveChapter({
-            ...chapter,
-            languages: setLocaleContent(chapter.languages, locale, html),
+      if (sid) {
+        const section = (latestSections[cid] ?? []).find((s) => s._id === sid);
+        if (section) {
+          await repository.saveSection({
+            ...section,
+            languages: setLocaleContent(section.languages, locale, html),
           });
-          if (projectId) await loadChapters(projectId);
+          await loadSections(cid);
         }
-      }, 800);
+      } else {
+        await repository.saveChapter({
+          ...chapter,
+          languages: setLocaleContent(chapter.languages, locale, html),
+        });
+        if (projectId) await loadChapters(projectId);
+      }
     },
     [loadChapters, loadSections, projectId],
   ); // stateRef never changes identity
 
   const saveContentForLocale = useCallback(
-    (html: string, locale: string) => {
-      const existing = saveTimerByLocaleRef.current.get(locale);
-      if (existing) clearTimeout(existing);
-      const timer = setTimeout(async () => {
-        saveTimerByLocaleRef.current.delete(locale);
-        const {
-          selectedChapterId: cid,
-          selectedSectionId: sid,
-          chapters: latestChapters,
-          sections: latestSections,
-        } = stateRef.current;
-        if (!cid) return;
-        const chapter = latestChapters.find((c) => c._id === cid);
-        if (!chapter) return;
-        if (sid) {
-          const section = (latestSections[cid] ?? []).find(
-            (s) => s._id === sid,
-          );
-          if (section) {
-            await repository.saveSection({
-              ...section,
-              languages: setLocaleContent(section.languages, locale, html),
-            });
-            await loadSections(cid);
-          }
-        } else {
-          await repository.saveChapter({
-            ...chapter,
-            languages: setLocaleContent(chapter.languages, locale, html),
+    async (html: string, locale: string) => {
+      const {
+        selectedChapterId: cid,
+        selectedSectionId: sid,
+        chapters: latestChapters,
+        sections: latestSections,
+      } = stateRef.current;
+      if (!cid) return;
+      const chapter = latestChapters.find((c) => c._id === cid);
+      if (!chapter) return;
+      if (sid) {
+        const section = (latestSections[cid] ?? []).find((s) => s._id === sid);
+        if (section) {
+          await repository.saveSection({
+            ...section,
+            languages: setLocaleContent(section.languages, locale, html),
           });
-          if (projectId) await loadChapters(projectId);
+          await loadSections(cid);
         }
-      }, 800);
-      saveTimerByLocaleRef.current.set(locale, timer);
+      } else {
+        await repository.saveChapter({
+          ...chapter,
+          languages: setLocaleContent(chapter.languages, locale, html),
+        });
+        if (projectId) await loadChapters(projectId);
+      }
     },
     [loadChapters, loadSections, projectId],
   );

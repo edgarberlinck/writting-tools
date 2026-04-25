@@ -23,6 +23,13 @@ export default function Editor({ content, onChange }: Props) {
     },
   });
 
+  // Focus editor when it first mounts (e.g. when selecting a chapter)
+  useEffect(() => {
+    if (editor) {
+      editor.commands.focus("end");
+    }
+  }, [editor]);
+
   useEffect(() => {
     if (editor && content !== editor.getHTML()) {
       editor.commands.setContent(content);
