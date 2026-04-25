@@ -12,9 +12,53 @@ permissions:
   contents: write
 
 jobs:
+  test-unit:
+    name: Test – Unit (Vitest)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm test
+
+  test-e2e:
+    name: Test – E2E (Playwright)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
   build-mac:
     name: Build – macOS (DMG)
     runs-on: macos-latest
+    needs: [test-unit, test-e2e]
 
     steps:
       - name: Checkout
@@ -46,6 +90,7 @@ jobs:
   build-win:
     name: Build – Windows (NSIS installer)
     runs-on: windows-latest
+    needs: [test-unit, test-e2e]
 
     steps:
       - name: Checkout

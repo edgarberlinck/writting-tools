@@ -154,12 +154,16 @@ export default function ChapterItem({
               <button
                 onClick={commit}
                 className="text-green-400 hover:text-green-300"
+                title="Confirm chapter rename"
+                aria-label="Confirm chapter rename"
               >
                 <FiCheck className="w-3 h-3" />
               </button>
               <button
                 onClick={() => setEditing(false)}
                 className="text-red-400 hover:text-red-300"
+                title="Cancel chapter rename"
+                aria-label="Cancel chapter rename"
               >
                 <FiX className="w-3 h-3" />
               </button>
@@ -169,12 +173,16 @@ export default function ChapterItem({
               <button
                 onClick={() => setEditing(true)}
                 className="text-gray-500 hover:text-gray-300"
+                title={`Edit chapter ${chapter.title}`}
+                aria-label={`Edit chapter ${chapter.title}`}
               >
                 <FiEdit2 className="w-3 h-3" />
               </button>
               <button
                 onClick={onDelete}
                 className="text-gray-500 hover:text-gray-300"
+                title={`Delete chapter ${chapter.title}`}
+                aria-label={`Delete chapter ${chapter.title}`}
               >
                 <FiTrash2 className="w-3 h-3" />
               </button>

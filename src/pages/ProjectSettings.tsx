@@ -126,8 +126,11 @@ export default function ProjectSettings() {
             </h2>
             <div className="space-y-4">
               <div>
-                <label className={labelCls}>Title</label>
+                <label htmlFor="project-title" className={labelCls}>
+                  Title
+                </label>
                 <input
+                  id="project-title"
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -135,8 +138,11 @@ export default function ProjectSettings() {
                 />
               </div>
               <div>
-                <label className={labelCls}>Author</label>
+                <label htmlFor="project-author" className={labelCls}>
+                  Author
+                </label>
                 <input
+                  id="project-author"
                   type="text"
                   value={author}
                   onChange={(e) => setAuthor(e.target.value)}
@@ -144,8 +150,11 @@ export default function ProjectSettings() {
                 />
               </div>
               <div>
-                <label className={labelCls}>Description</label>
+                <label htmlFor="project-description" className={labelCls}>
+                  Description
+                </label>
                 <textarea
+                  id="project-description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className={inputCls}
