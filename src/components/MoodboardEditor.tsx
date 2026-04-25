@@ -38,7 +38,12 @@ type DrawingTool = 'pen' | 'line' | 'rect' | 'circle' | 'text';
 export default function MoodboardEditor({ content, onChange }: Props) {
   const [data, setData] = useState<MoodboardData>(() => {
     try {
-      return content ? JSON.parse(content) : { images: [], strokes: [] };
+      const parsed = content ? JSON.parse(content) : { images: [], strokes: [] };
+      // Ensure structure is valid (handle old format)
+      return {
+        images: Array.isArray(parsed.images) ? parsed.images : [],
+        strokes: Array.isArray(parsed.strokes) ? parsed.strokes : [],
+      };
     } catch {
       return { images: [], strokes: [] };
     }
@@ -78,7 +83,8 @@ export default function MoodboardEditor({ content, onChange }: Props) {
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
     // Draw all images first
-    data.images.forEach((img) => {
+    const images = data.images || [];
+    images.forEach((img) => {
       const image = new Image();
       image.onload = () => {
         ctx.drawImage(image, img.x, img.y, img.width, img.height);
@@ -87,7 +93,7 @@ export default function MoodboardEditor({ content, onChange }: Props) {
     });
 
     // Draw all strokes
-    strokes.forEach((stroke) => {
+    (strokes || []).forEach((stroke) => {
       ctx.strokeStyle = stroke.color;
       ctx.fillStyle = stroke.color;
       ctx.lineWidth = stroke.lineWidth;
